@@ -1,0 +1,25 @@
+{
+  "name": "tiny-midi-controller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/odedw/tiny-midi-controller.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/odedw/tiny-midi-controller/issues"
+  },
+  "homepage": "https://github.com/odedw/tiny-midi-controller#readme",
+  "dependencies": {
+    "osx-mouse": "^1.2.1",
+    "robotjs": "^0.4.7",
+    "web-midi-api": "^1.4.4",
+    "webmidi": "^2.0.0"
+  }
+}
