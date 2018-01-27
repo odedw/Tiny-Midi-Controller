@@ -17,5 +17,13 @@
       "from": 127,
       "to": 0
     }
-  ]
+  ],
+  "keys": {
+    "a": {
+      "type": "cc",
+      "channel": 16,
+      "control": 14,
+      "value": 0
+    }
+  }
 }

@@ -3,6 +3,7 @@ const mouse = require('osx-mouse')();
 const robot = require('robotjs');
 const engine = require('./engine');
 const midiSender = require('./midiSender.js');
+const readline = require('readline');
 
 midiSender
   .init(config.device)
@@ -11,6 +12,18 @@ midiSender
     const initialPos = robot.getMousePos();
     engine.onMouseMove(initialPos.x, initialPos.y);
     mouse.on('move', engine.onMouseMove);
+    readline.emitKeypressEvents(process.stdin);
+    process.stdin.setRawMode(true);
+    process.stdin.on('keypress', (str, key) => {
+      if (key.ctrl && key.name === 'c') {
+        process.exit();
+      } else {
+        console.log(`You pressed the "${str}" key`);
+        console.log();
+        console.log(key);
+        console.log();
+      }
+    });
   })
   .catch(err => {
     console.log(err);
