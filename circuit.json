@@ -7,7 +7,9 @@
       "control": 12,
       "from": 0,
       "to": 127
-    },
+    }
+  ],
+  "x": [
     {
       "type": "cc",
       "channel": 16,
