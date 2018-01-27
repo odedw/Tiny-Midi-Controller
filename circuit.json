@@ -1,0 +1,19 @@
+{
+  "device": "Circuit",
+  "y": [
+    {
+      "type": "cc",
+      "channel": 16,
+      "control": 12,
+      "from": 0,
+      "to": 127
+    },
+    {
+      "type": "cc",
+      "channel": 16,
+      "control": 14,
+      "from": 127,
+      "to": 0
+    }
+  ]
+}
