@@ -19,11 +19,19 @@
     }
   ],
   "keys": {
-    "a": {
-      "type": "cc",
-      "channel": 16,
-      "control": 14,
-      "value": 0
-    }
+    "a": [
+      {
+        "type": "cc",
+        "channel": 16,
+        "control": 12,
+        "value": 0
+      },
+      {
+        "type": "cc",
+        "channel": 16,
+        "control": 14,
+        "value": 0
+      }
+    ]
   }
 }

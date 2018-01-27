@@ -18,10 +18,7 @@ midiSender
       if (key.ctrl && key.name === 'c') {
         process.exit();
       } else {
-        console.log(`You pressed the "${str}" key`);
-        console.log();
-        console.log(key);
-        console.log();
+        engine.onKeyDown(key);
       }
     });
   })

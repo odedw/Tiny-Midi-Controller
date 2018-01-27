@@ -14,7 +14,7 @@ function calcValueAndSendCommands(ratio, parameters, lastValues) {
     );
     if (lastValues[i] != value) {
       lastValues[i] = value;
-      midiSender.send(value, parameter);
+      midiSender.send(parameter, value);
     }
   }
 }
@@ -33,4 +33,10 @@ module.exports.onMouseMove = (x, y) => {
     lastValues.x
   );
 };
-module.exports.onKeyDown = (x, y) => {};
+module.exports.onKeyDown = key => {
+  if (config.keys[key.name]) {
+    config.keys[key.name].forEach(parameter => {
+      midiSender.send(parameter);
+    });
+  }
+};

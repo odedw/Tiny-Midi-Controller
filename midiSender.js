@@ -18,7 +18,7 @@ module.exports.init = device =>
     });
   });
 
-module.exports.send = (value, parameter) => {
+module.exports.send = (parameter, value = parameter.value) => {
   try {
     if (parameter.type == 'cc') {
       output.sendControlChange(parameter.control, value, parameter.channel);
