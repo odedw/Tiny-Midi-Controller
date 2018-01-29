@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const config = require('./circuit.json');
 const mouse = require('osx-mouse')();
 const robot = require('robotjs');
