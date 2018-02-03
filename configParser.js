@@ -43,26 +43,38 @@ class ConfigParser {
     return params;
   }
 
+  expandDeviceModule(deviceModule, program) {
+    Object.keys(deviceModule).forEach(key => {
+      const keyIndex = program.rawArgs.indexOf(key);
+      if (keyIndex < 0) return;
+
+      const tokens = deviceModule[key].split(' ');
+      program.rawArgs.splice(keyIndex, 1, ...tokens);
+    });
+  }
+
   parse(program) {
     if (!program.D) {
       console.log('No device specified');
       program.help();
-    } else {
-      this.config.device = program.D;
     }
+
+    this.config.device = program.D;
+    let deviceModule = {};
+    try {
+      deviceModule = require(`./devices/${this.config.device}.json`);
+    } catch (err) {}
+
+    this.expandDeviceModule(deviceModule, program);
 
     if (!program.Y && !program.X) {
       console.log('No parameters entered for either mouse or keys');
       program.help();
     }
 
-    if (program.X) {
-      this.config.x = this.extractParams(program.rawArgs, '-x');
-    }
+    this.config.x = program.X ? this.extractParams(program.rawArgs, '-x') : [];
+    this.config.y = program.Y ? this.extractParams(program.rawArgs, '-y') : [];
 
-    if (program.Y) {
-      this.config.y = this.extractParams(program.rawArgs, '-y');
-    }
     return this.config;
   }
 }

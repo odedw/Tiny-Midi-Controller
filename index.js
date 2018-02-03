@@ -15,7 +15,7 @@ program.on('--help', () => {
   console.log('Parameters:');
   console.log('');
   console.log(
-    '    cc <channel> <controller> <from> <to>    All values between 0-127'
+    '    cc <channel> <controller> <from> <to>    Send control change on channel (1-16) to controller (0-119) with value (0-127)'
   );
 });
 

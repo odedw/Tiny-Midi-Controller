@@ -1,0 +1,8 @@
+{
+  "synth-1-level": "cc 16 12",
+  "synth-2-level": "cc 16 14",
+  "drum-1-level": "cc 10 12",
+  "drum-2-level": "cc 10 23",
+  "drum-3-level": "cc 10 45",
+  "drum-4-level": "cc 10 53"
+}
