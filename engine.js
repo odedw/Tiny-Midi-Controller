@@ -1,45 +1,52 @@
-const midiSender = require('./midiSender.js');
 const screenSize = require('robotjs').getScreenSize();
-let lastValues, config;
+class Engine {
+  constructor(config, midiSender) {
+    this.config = config;
+    this.midiSender = midiSender;
+    this.lastValues = {
+      y: new Array(config.y.length),
+      x: new Array(config.x.length)
+    };
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+  }
 
-function calcValueAndSendCommands(ratio, parameters, lastValues) {
-  for (let i = 0; i < parameters.length; i++) {
-    const parameter = parameters[i];
-    const value = Math.round(
-      (parameter.to - parameter.from) * ratio + parameter.from
+  calcValueAndSendCommands(ratio, parameters, lastValues) {
+    for (let i = 0; i < parameters.length; i++) {
+      const parameter = parameters[i];
+      const value = Math.round(
+        (parameter.to - parameter.from) * ratio + parameter.from
+      );
+      if (this.lastValues[i] != value) {
+        this.lastValues[i] = value;
+        this.midiSender.send(parameter, value);
+      }
+    }
+  }
+
+  onMouseMove(x, y) {
+    // y parameters
+    this.calcValueAndSendCommands(
+      (screenSize.height - y) / screenSize.height,
+      this.config.y,
+      this.lastValues.y
     );
-    if (lastValues[i] != value) {
-      lastValues[i] = value;
-      midiSender.send(parameter, value);
+
+    // x parameters
+    this.calcValueAndSendCommands(
+      (screenSize.width - x) / screenSize.width,
+      this.config.x,
+      this.lastValues.x
+    );
+  }
+
+  onKeyDown(key) {
+    if (this.config.keys[key.name]) {
+      this.config.keys[key.name].forEach(parameter => {
+        this.midiSender.send(parameter);
+      });
     }
   }
 }
-module.exports.init = c => {
-  lastValues = {
-    y: new Array(c.y.length),
-    x: new Array(c.x.length)
-  };
-  config = c;
-};
-module.exports.onMouseMove = (x, y) => {
-  // y parameters
-  calcValueAndSendCommands(
-    (screenSize.height - y) / screenSize.height,
-    config.y,
-    lastValues.y
-  );
 
-  // x parameters
-  calcValueAndSendCommands(
-    (screenSize.width - x) / screenSize.width,
-    config.x,
-    lastValues.x
-  );
-};
-module.exports.onKeyDown = key => {
-  if (config.keys[key.name]) {
-    config.keys[key.name].forEach(parameter => {
-      midiSender.send(parameter);
-    });
-  }
-};
+module.exports = Engine;

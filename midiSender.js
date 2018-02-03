@@ -2,40 +2,49 @@ global.navigator = require('web-midi-api');
 if (!global.performance)
   global.performance = { now: require('performance-now') };
 const WebMidi = new require('webmidi');
-let output = undefined;
-let lastValues = {};
+class MidiSender {
+  constructor() {
+    let output = undefined;
+    let lastValues = {};
+  }
 
-function convertToValue(value, from, to) {
-  return;
-}
-module.exports.init = device =>
-  new Promise((fulfill, reject) => {
-    WebMidi.enable(err => {
-      if (err) reject(err);
-      output = WebMidi.getOutputByName(device);
-      if (!output) {
-        reject(
-          `No output by the name ${device}.\nAvailable devices are:\n${WebMidi.outputs
-            .map(output => `\t${output.name}`)
-            .join('\n')}`
+  init(device) {
+    return new Promise((fulfill, reject) => {
+      WebMidi.enable(err => {
+        if (err) reject(err);
+        this.output = WebMidi.getOutputByName(device);
+
+        if (!this.output) {
+          reject(
+            `No output by the name ${device}.\nAvailable devices are:\n${WebMidi.outputs
+              .map(output => `\t${output.name}`)
+              .join('\n')}`
+          );
+        }
+        fulfill();
+      });
+    });
+  }
+
+  send(parameter, value = parameter.value) {
+    try {
+      if (parameter.type == 'cc') {
+        // console.log(
+        //   `channel:${parameter.channel}, controller:${
+        //     parameter.controller
+        //   }, value:${value}`
+        // );
+
+        this.output.sendControlChange(
+          parameter.controller,
+          value,
+          parameter.channel
         );
       }
-      fulfill();
-    });
-  });
-
-module.exports.send = (parameter, value = parameter.value) => {
-  try {
-    if (parameter.type == 'cc') {
-      // console.log(
-      //   `channel:${parameter.channel}, controller:${
-      //     parameter.controller
-      //   }, value:${value}`
-      // );
-
-      output.sendControlChange(parameter.controller, value, parameter.channel);
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-};
+}
+
+module.exports = MidiSender;

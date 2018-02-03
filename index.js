@@ -1,12 +1,15 @@
 #!/usr/bin/env node
-
+'use strict';
 const mouse = require('osx-mouse')();
 const robot = require('robotjs');
-const engine = require('./engine');
-const midiSender = require('./midiSender');
+const Engine = require('./Engine');
+const MidiSender = require('./MidiSender'),
+  midiSender = new MidiSender();
 const readline = require('readline');
 const program = require('commander');
-const configParser = require('./configParser');
+const ConfigParser = require('./ConfigParser'),
+  configParser = new ConfigParser();
+
 program.on('--help', () => {
   console.log('');
   console.log('Parameters:');
@@ -28,8 +31,9 @@ const config = configParser.parse(program);
 midiSender
   .init(config.device)
   .then(() => {
-    engine.init(config);
     console.log('Ready...');
+
+    let engine = new Engine(config, midiSender);
     const initialPos = robot.getMousePos();
     engine.onMouseMove(initialPos.x, initialPos.y);
     mouse.on('move', engine.onMouseMove);
