@@ -13,7 +13,13 @@ module.exports.init = device =>
     WebMidi.enable(err => {
       if (err) reject(err);
       output = WebMidi.getOutputByName(device);
-      if (!output) reject('No output by the name ' + device);
+      if (!output) {
+        reject(
+          `No output by the name ${device}.\nAvailable devices are:\n${WebMidi.outputs
+            .map(output => `\t${output.name}`)
+            .join('\n')}`
+        );
+      }
       fulfill();
     });
   });
@@ -21,7 +27,13 @@ module.exports.init = device =>
 module.exports.send = (parameter, value = parameter.value) => {
   try {
     if (parameter.type == 'cc') {
-      output.sendControlChange(parameter.control, value, parameter.channel);
+      // console.log(
+      //   `channel:${parameter.channel}, controller:${
+      //     parameter.controller
+      //   }, value:${value}`
+      // );
+
+      output.sendControlChange(parameter.controller, value, parameter.channel);
     }
   } catch (err) {
     console.log(err);

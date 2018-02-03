@@ -1,10 +1,6 @@
 const midiSender = require('./midiSender.js');
 const screenSize = require('robotjs').getScreenSize();
-const config = require('./circuit.json');
-const lastValues = {
-  y: new Array(config.y.length),
-  x: new Array(config.x.length)
-};
+let lastValues, config;
 
 function calcValueAndSendCommands(ratio, parameters, lastValues) {
   for (let i = 0; i < parameters.length; i++) {
@@ -18,6 +14,13 @@ function calcValueAndSendCommands(ratio, parameters, lastValues) {
     }
   }
 }
+module.exports.init = c => {
+  lastValues = {
+    y: new Array(c.y.length),
+    x: new Array(c.x.length)
+  };
+  config = c;
+};
 module.exports.onMouseMove = (x, y) => {
   // y parameters
   calcValueAndSendCommands(

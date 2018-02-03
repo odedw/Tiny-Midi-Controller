@@ -8,13 +8,14 @@
     "type": "git",
     "url": "git+https://github.com/odedw/tiny-midi-controller.git"
   },
-  "author": "",
+  "author": "Oded Welgreen",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/odedw/tiny-midi-controller/issues"
   },
   "homepage": "https://github.com/odedw/tiny-midi-controller#readme",
   "dependencies": {
+    "commander": "^2.13.0",
     "osx-mouse": "^1.2.1",
     "robotjs": "^0.4.7",
     "web-midi-api": "^1.4.4",
