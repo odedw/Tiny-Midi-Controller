@@ -18,6 +18,7 @@
     "commander": "^2.13.0",
     "osx-mouse": "^1.2.1",
     "robotjs": "^0.4.7",
+    "terminal-kit": "^1.14.3",
     "web-midi-api": "^1.4.4",
     "webmidi": "^2.0.0"
   },

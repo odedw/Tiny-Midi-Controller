@@ -1,25 +1,22 @@
 const screenSize = require('robotjs').getScreenSize();
+const draw = require('./ControllerView');
 class Engine {
-  constructor(config, midiSender) {
-    this.config = config;
+  constructor(initialState, midiSender) {
+    this.state = initialState;
     this.midiSender = midiSender;
-    this.lastValues = {
-      y: new Array(config.y.length),
-      x: new Array(config.x.length)
-    };
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
   }
 
-  calcValueAndSendCommands(ratio, parameters, lastValues) {
+  calcValueAndSendCommands(ratio, parameters) {
     for (let i = 0; i < parameters.length; i++) {
       const parameter = parameters[i];
       const value = Math.round(
         (parameter.to - parameter.from) * ratio + parameter.from
       );
-      if (this.lastValues[i] != value) {
-        this.lastValues[i] = value;
-        this.midiSender.send(parameter, value);
+      if (parameter.value !== value) {
+        parameter.value = value;
+        this.midiSender.send(parameter);
       }
     }
   }
@@ -28,22 +25,19 @@ class Engine {
     // y parameters
     this.calcValueAndSendCommands(
       (screenSize.height - y) / screenSize.height,
-      this.config.y,
-      this.lastValues.y
+      this.state.y
     );
 
     // x parameters
-    this.calcValueAndSendCommands(
-      (screenSize.width - x) / screenSize.width,
-      this.config.x,
-      this.lastValues.x
-    );
+    this.calcValueAndSendCommands(x / screenSize.width, this.state.x);
+
+    draw(this.state);
   }
 
   onKeyDown(key) {
-    if (this.config.keys[key.name]) {
-      this.config.keys[key.name].forEach(parameter => {
-        this.midiSender.send(parameter);
+    if (this.state.keys[key.name]) {
+      this.state.keys[key.name].forEach(parameter => {
+        // this.midiSender.send(parameter);
       });
     }
   }

@@ -14,13 +14,13 @@ class MidiSender {
         if (err) reject(err);
         this.output = WebMidi.getOutputByName(device);
 
-        if (!this.output) {
-          reject(
-            `No output by the name ${device}.\nAvailable devices are:\n${WebMidi.outputs
-              .map(output => `\t${output.name}`)
-              .join('\n')}`
-          );
-        }
+        // if (!this.output) {
+        //   reject(
+        //     `No output by the name ${device}.\nAvailable devices are:\n${WebMidi.outputs
+        //       .map(output => `\t${output.name}`)
+        //       .join('\n')}`
+        //   );
+        // }
         fulfill();
       });
     });

@@ -9,6 +9,7 @@ const readline = require('readline');
 const program = require('commander');
 const ConfigParser = require('./ConfigParser'),
   configParser = new ConfigParser();
+const term = require('terminal-kit').terminal;
 
 program.on('--help', () => {
   console.log('');
@@ -41,6 +42,8 @@ midiSender
     process.stdin.setRawMode(true);
     process.stdin.on('keypress', (str, key) => {
       if (key.ctrl && key.name === 'c') {
+        term.reset();
+
         process.exit();
       } else {
         engine.onKeyDown(key);

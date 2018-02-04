@@ -1,9 +1,10 @@
 class ConfigParser {
   constructor() {
-    this.config = {};
+    this.config = { keys: {} };
     this.parseFunctions = { cc: this.parseCC.bind(this) };
   }
 
+  // Parse a string and assert it is in value
   parseAndValidate(str, min, max, name) {
     const val = parseInt(str);
     if (val < min || val > max)
@@ -13,6 +14,7 @@ class ConfigParser {
     return val;
   }
 
+  // Parse control change message
   parseCC(args, i) {
     let param = {
       from: 0,
