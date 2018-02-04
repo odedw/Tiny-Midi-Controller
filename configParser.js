@@ -25,9 +25,11 @@ class ConfigParser {
       param.from = this.parseAndValidate(args[i++], 0, 127, 'from');
       param.to = this.parseAndValidate(args[i++], 0, 127, 'to');
     }
+    param.name = `cc ${param.channel} ${param.controller}`;
     return { i, param };
   }
 
+  // Extract all midi parameters for an input
   extractParams(args, flag) {
     let params = [];
     let index = args.indexOf(flag) + 1;
@@ -43,6 +45,7 @@ class ConfigParser {
     return params;
   }
 
+  // Expand presets from the device module to the parameter
   expandDeviceModule(deviceModule, program) {
     Object.keys(deviceModule).forEach(key => {
       const keyIndex = program.rawArgs.indexOf(key);
@@ -50,6 +53,17 @@ class ConfigParser {
 
       const tokens = deviceModule[key].split(' ');
       program.rawArgs.splice(keyIndex, 1, ...tokens);
+    });
+  }
+
+  // Set parameter name from device module if exists
+  setParameterNamesFromDeviceModule(deviceModule) {
+    const reverseModule = Object.keys(deviceModule).reduce((res, key) => {
+      res[deviceModule[key]] = key;
+      return res;
+    }, {});
+    this.config.x.concat(this.config.y).forEach(param => {
+      if (reverseModule[param.name]) param.name = reverseModule[param.name];
     });
   }
 
@@ -75,6 +89,7 @@ class ConfigParser {
     this.config.x = program.X ? this.extractParams(program.rawArgs, '-x') : [];
     this.config.y = program.Y ? this.extractParams(program.rawArgs, '-y') : [];
 
+    this.setParameterNamesFromDeviceModule(deviceModule);
     return this.config;
   }
 }
