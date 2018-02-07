@@ -1,11 +1,13 @@
 const screenSize = require('robotjs').getScreenSize();
-const draw = require('./ControllerView');
+const ControllerView = require('./View/ControllerView');
 class Engine {
   constructor(initialState, midiSender) {
     this.state = initialState;
     this.midiSender = midiSender;
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.view = new ControllerView();
+    this.view.init();
   }
 
   calcValueAndSendCommands(ratio, parameters) {
@@ -16,7 +18,7 @@ class Engine {
       );
       if (parameter.value !== value) {
         parameter.value = value;
-        this.midiSender.send(parameter);
+        // this.midiSender.send(parameter);
       }
     }
   }
@@ -31,7 +33,7 @@ class Engine {
     // x parameters
     this.calcValueAndSendCommands(x / screenSize.width, this.state.x);
 
-    draw(this.state);
+    this.view.render(this.state);
   }
 
   onKeyDown(key) {

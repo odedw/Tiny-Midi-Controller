@@ -32,8 +32,6 @@ const config = configParser.parse(program);
 midiSender
   .init(config.device)
   .then(() => {
-    console.log('Ready...');
-
     let engine = new Engine(config, midiSender);
     const initialPos = robot.getMousePos();
     engine.onMouseMove(initialPos.x, initialPos.y);
@@ -43,7 +41,6 @@ midiSender
     process.stdin.on('keypress', (str, key) => {
       if (key.ctrl && key.name === 'c') {
         term.reset();
-
         process.exit();
       } else {
         engine.onKeyDown(key);
