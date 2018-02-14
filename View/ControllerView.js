@@ -96,19 +96,19 @@ class ControllerView {
     term.saveCursor();
     term.hideCursor();
 
+    const allFaders = initialState.x.concat(initialState.y);
+
     //container
-    this.ninePatchDrawer.draw(
-      boxPatch,
-      margin,
-      margin,
-      term.width - margin * 2,
-      term.height - margin * 2
-    );
+    const width =
+      allFaders.length * (margin * 2 + faderWidth) + allFaders.length + 1; // faders + 2 margins per fader + dividers
+    const height = faderHeight + margin * 2 + 3; // faders + margin + 3 lines for parameter name
+    const x = Math.floor((term.width - width) / 2);
+    const y = Math.floor((term.height - height) / 2);
+    this.ninePatchDrawer.draw(boxPatch, x, y, width, height);
 
     //draw initial fader slots (handles will be drawn later)
-    const allFaders = initialState.x.concat(initialState.y);
-    let currentX = margin * 2 + 1,
-      currentY = margin * 2 + 1;
+    let currentX = x + margin + 1,
+      currentY = y + margin + 1;
 
     for (let i = 0; i < allFaders.length; i++) {
       const parameter = allFaders[i];
@@ -120,7 +120,7 @@ class ControllerView {
 
       if (i < allFaders.length - 1) {
         currentX += faderWidth + margin;
-        this.drawVerticalDivider(currentX, currentY - margin, faderHeight + 3);
+        this.drawVerticalDivider(currentX, currentY - margin, height - 2);
         currentX += margin + 1;
       }
     }

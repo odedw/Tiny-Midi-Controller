@@ -13,7 +13,7 @@ class Engine {
 
   createView(state) {
     // if too big for controller view
-    return state.x.length + state.y.length > 0
+    return state.x.length + state.y.length > 10
       ? new TextView()
       : new ControllerView();
   }
