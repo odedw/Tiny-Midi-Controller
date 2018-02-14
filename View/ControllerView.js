@@ -44,9 +44,13 @@ class ControllerView {
   }
 
   drawFaderHandle(x, y, w, h, parameter) {
-    //current handle location according to value
     let slotHandleDiff = (w - faderSlotWidth) / 2;
-    let ratio = parameter.value / parameter.to;
+
+    //current handle location according to value
+    let inverse = parameter.from > parameter.to;
+    let from = inverse ? parameter.to : parameter.from;
+    let to = inverse ? parameter.from : parameter.to;
+    let ratio = (parameter.value - from) / Math.abs(to - from);
     let handleY = Math.round(
       y +
         faderHandleMargin +
