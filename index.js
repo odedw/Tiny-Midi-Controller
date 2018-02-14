@@ -26,7 +26,12 @@ program
   .option('-y <parameters>', 'Parameters to be controlled by mouse y axis')
   .parse(process.argv);
 
-const config = configParser.parse(program);
+try {
+  const config = configParser.parse(program);
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
 // console.log(config);
 
 midiSender

@@ -38,7 +38,9 @@ class ConfigParser {
     while (index < args.length && !args[index].startsWith('-')) {
       let type = args[index++];
       if (!this.parseFunctions[type]) {
-        throw new Error(`No parameter type by the name ${type}`);
+        throw new Error(
+          `No parameter type or device parameter by the name '${type}'`
+        );
       }
       let { param, i } = this.parseFunctions[type](args, index);
       index = i;
