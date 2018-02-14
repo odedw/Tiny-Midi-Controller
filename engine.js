@@ -1,13 +1,21 @@
 const screenSize = require('robotjs').getScreenSize();
 const ControllerView = require('./view/ControllerView');
+const TextView = require('./view/TextView');
 class Engine {
   constructor(initialState, midiSender) {
     this.state = initialState;
     this.midiSender = midiSender;
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.view = new ControllerView();
+    this.view = this.createView(initialState);
     this.view.init(initialState);
+  }
+
+  createView(state) {
+    // if too big for controller view
+    return state.x.length + state.y.length > 0
+      ? new TextView()
+      : new ControllerView();
   }
 
   calcValueAndSendCommands(ratio, parameters) {
