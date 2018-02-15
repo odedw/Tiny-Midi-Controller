@@ -44,6 +44,11 @@ class MidiSender {
         // );
 
         this.output.sendControlChange(parameter.controller, value, parameter.channel);
+      } else if (parameter.type == 'on') {
+        this.output.playNote(parameter.value, parameter.channel, {
+          duration: parameter.duration ? parameter.duration : undefined,
+          velocity: parameter.velocity
+        });
       }
     } catch (err) {
       console.log(err);

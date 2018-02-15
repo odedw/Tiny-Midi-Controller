@@ -11,7 +11,6 @@ const ConfigParser = require('./ConfigParser'),
   configParser = new ConfigParser();
 const term = require('terminal-kit').terminal;
 const midiMessageTypes = require('./midiMessageTypes.json');
-
 program.on('--help', () => {
   console.log('');
   console.log('Parameters:');
@@ -19,7 +18,7 @@ program.on('--help', () => {
   Object.keys(midiMessageTypes).forEach(type => {
     const description = midiMessageTypes[type];
     let str = '    ' + type + ' ' + description.format.map(p => `<${p}>`).join(' ');
-    str += ' '.repeat(50 - str.length);
+    str += ' '.repeat(60 - str.length);
     str += `Send ${description.fullName} with ${description.format
       .map(p => `${p} (${description[p].min}-${description[p].max})`)
       .join(', ')}`;
@@ -44,7 +43,7 @@ program
   .option('-y <parameters>', 'Parameters to be controlled by mouse y axis')
   .parse(process.argv);
 
-if (program.commands.length > 0) return; //list command
+if (program.rawArgs[2] === 'list') return; //list command
 
 let config = {};
 try {
