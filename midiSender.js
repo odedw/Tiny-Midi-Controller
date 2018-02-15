@@ -1,6 +1,5 @@
 global.navigator = require('web-midi-api');
-if (!global.performance)
-  global.performance = { now: require('performance-now') };
+if (!global.performance) global.performance = { now: require('performance-now') };
 const WebMidi = new require('webmidi');
 class MidiSender {
   constructor() {
@@ -26,6 +25,15 @@ class MidiSender {
     });
   }
 
+  getOutputs() {
+    return new Promise((fulfill, reject) => {
+      WebMidi.enable(err => {
+        if (err) reject(err);
+        fulfill(WebMidi.outputs.map(output => output.name));
+      });
+    });
+  }
+
   send(parameter, value = parameter.value) {
     try {
       if (parameter.type == 'cc') {
@@ -35,11 +43,7 @@ class MidiSender {
         //   }, value:${value}`
         // );
 
-        this.output.sendControlChange(
-          parameter.controller,
-          value,
-          parameter.channel
-        );
+        this.output.sendControlChange(parameter.controller, value, parameter.channel);
       }
     } catch (err) {
       console.log(err);

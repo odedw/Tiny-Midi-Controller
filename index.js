@@ -29,10 +29,22 @@ program.on('--help', () => {
 });
 
 program
+  .command('list')
+  .description('List currently connected MIDI devices')
+  .action(() => {
+    midiSender.getOutputs().then(outputs => {
+      outputs.forEach(console.log);
+      process.exit(0);
+    });
+  });
+
+program
   .option('-d <name>', 'Set device')
   .option('-x <parameters>', 'Parameters to be controlled by mouse x axis')
   .option('-y <parameters>', 'Parameters to be controlled by mouse y axis')
   .parse(process.argv);
+
+if (program.commands.length > 0) return; //list command
 
 let config = {};
 try {
