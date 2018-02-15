@@ -36,7 +36,7 @@ class MidiSender {
 
   send(parameter, value = parameter.value) {
     try {
-      if (parameter.type == 'cc') {
+      if (parameter.type === 'cc') {
         // console.log(
         //   `channel:${parameter.channel}, controller:${
         //     parameter.controller
@@ -44,11 +44,13 @@ class MidiSender {
         // );
 
         this.output.sendControlChange(parameter.controller, value, parameter.channel);
-      } else if (parameter.type == 'on') {
+      } else if (parameter.type === 'play') {
         this.output.playNote(parameter.value, parameter.channel, {
           duration: parameter.duration ? parameter.duration : undefined,
           velocity: parameter.velocity
         });
+      } else if (parameter.type === 'pgm') {
+        this.output.sendProgramChange(parameter.value, parameter.channel);
       }
     } catch (err) {
       console.log(err);

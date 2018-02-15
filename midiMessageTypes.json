@@ -50,5 +50,24 @@
     "format": ["channel", "velocity", "duration", "from", "to"],
     "displayName": ["channel", "note"],
     "fullName": "Play Note"
+  },
+  "pgm": {
+    "channel": {
+      "min": 1,
+      "max": 16
+    },
+    "from": {
+      "min": 0,
+      "max": 127,
+      "default": 0
+    },
+    "to": {
+      "min": 0,
+      "max": 127,
+      "default": 127
+    },
+    "format": ["channel"],
+    "displayName": ["channel"],
+    "fullName": "Program Change"
   }
 }
