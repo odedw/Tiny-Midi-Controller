@@ -10,14 +10,22 @@ const program = require('commander');
 const ConfigParser = require('./ConfigParser'),
   configParser = new ConfigParser();
 const term = require('terminal-kit').terminal;
+const midiMessageTypes = require('./midiMessageTypes.json');
 
 program.on('--help', () => {
   console.log('');
   console.log('Parameters:');
   console.log('');
-  console.log(
-    '    cc <channel> <controller> <from> <to>    Send control change on channel (1-16) to controller (0-119) in the range <from>-<to> (0-127)'
-  );
+  Object.keys(midiMessageTypes).forEach(type => {
+    const description = midiMessageTypes[type];
+    let str = '    ' + type + ' ' + description.format.map(p => `<${p}>`).join(' ');
+    str += ' '.repeat(50 - str.length);
+    str += `Send ${description.fullName} with ${description.format
+      .map(p => `${p} (${description[p].min}-${description[p].max})`)
+      .join(', ')}`;
+    console.log(str);
+  });
+  console.log('');
 });
 
 program

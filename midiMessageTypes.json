@@ -19,6 +19,7 @@
       "default": 127
     },
     "format": ["channel", "controller", "from", "to"],
-    "name": ["channel", "controller"]
+    "displayName": ["channel", "controller"],
+    "fullName": "Control Change"
   }
 }

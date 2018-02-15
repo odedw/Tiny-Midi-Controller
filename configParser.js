@@ -44,7 +44,8 @@ class ConfigParser {
           parameter[format[i]] = midiMessageTypes[type][format[i]].default;
         }
       }
-      parameter.name = type + ' ' + midiMessageTypes[type].name.map(p => parameter[p]).join(' ');
+      parameter.name =
+        type + ' ' + midiMessageTypes[type].displayName.map(p => parameter[p]).join(' ');
       parameters.push(parameter);
     }
     return parameters;
