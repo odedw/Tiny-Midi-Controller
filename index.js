@@ -16,7 +16,7 @@ program.on('--help', () => {
   console.log('Parameters:');
   console.log('');
   console.log(
-    '    cc <channel> <controller> <from> <to>    Send control change on channel (1-16) to controller (0-119) with value (0-127)'
+    '    cc <channel> <controller> <from> <to>    Send control change on channel (1-16) to controller (0-119) in the range <from>-<to> (0-127)'
   );
 });
 
@@ -26,14 +26,15 @@ program
   .option('-y <parameters>', 'Parameters to be controlled by mouse y axis')
   .parse(process.argv);
 
+let config = {};
 try {
-  const config = configParser.parse(program);
+  config = configParser.parse(program);
 } catch (error) {
   console.log(error);
   process.exit(1);
 }
 // console.log(config);
-
+// process.exit(0);
 midiSender
   .init(config.device)
   .then(() => {

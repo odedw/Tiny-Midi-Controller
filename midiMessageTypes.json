@@ -1,0 +1,24 @@
+{
+  "cc": {
+    "channel": {
+      "min": 1,
+      "max": 16
+    },
+    "controller": {
+      "min": 0,
+      "max": 119
+    },
+    "from": {
+      "min": 0,
+      "max": 127,
+      "default": 0
+    },
+    "to": {
+      "min": 0,
+      "max": 127,
+      "default": 127
+    },
+    "format": ["channel", "controller", "from", "to"],
+    "name": ["channel", "controller"]
+  }
+}

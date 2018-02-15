@@ -1,52 +1,53 @@
+const midiMessageTypes = require('./midiMessageTypes.json');
+
 class ConfigParser {
   constructor() {
     this.config = { keys: {} };
-    this.parseFunctions = { cc: this.parseCC.bind(this) };
-  }
-
-  // Parse a string and assert it is in value
-  parseAndValidate(str, min, max, name) {
-    const val = parseInt(str);
-    if (val < min || val > max)
-      throw new Error(
-        `Parameter ${name} has value ${val} which is out of the accepted range of ${min}-${max}`
-      );
-    return val;
-  }
-
-  // Parse control change message
-  parseCC(args, i) {
-    let param = {
-      from: 0,
-      to: 127,
-      type: 'cc'
-    };
-    param.channel = this.parseAndValidate(args[i++], 1, 16, 'channel');
-    param.controller = this.parseAndValidate(args[i++], 0, 119, 'controller');
-    if (!isNaN(parseInt(args[i]))) {
-      param.from = this.parseAndValidate(args[i++], 0, 127, 'from');
-      param.to = this.parseAndValidate(args[i++], 0, 127, 'to');
-    }
-    param.name = `cc ${param.channel} ${param.controller}`;
-    return { i, param };
   }
 
   // Extract all midi parameters for an input
   extractParams(args, flag) {
-    let params = [];
+    let parameters = [];
     let index = args.indexOf(flag) + 1;
     while (index < args.length && !args[index].startsWith('-')) {
       let type = args[index++];
-      if (!this.parseFunctions[type]) {
-        throw new Error(
-          `No parameter type or device parameter by the name '${type}'`
-        );
+      if (!midiMessageTypes[type])
+        throw new Error(`No parameter type or device parameter by the name '${type}'`);
+
+      const format = midiMessageTypes[type].format;
+      let parameter = { type };
+      for (let i = 0; i < format.length; i++) {
+        let val = parseInt(args[index]);
+        // console.log(`parsing ${format[i]}, val: ${val}`);
+
+        if (!isNaN(val)) {
+          if (
+            val < midiMessageTypes[type][format[i]].min ||
+            val > midiMessageTypes[type][format[i]].max
+          )
+            throw new Error(
+              `The parameter '${
+                format[i]
+              }' for MIDI message type '${type}' has to be in the range ${
+                midiMessageTypes[type][format[i]].min
+              }-${midiMessageTypes[type][format[i]].max}`
+            );
+
+          parameter[format[i]] = val;
+          index++;
+        } else {
+          if (midiMessageTypes[type][format[i]].default === undefined)
+            throw new Error(
+              `No default value for the parameter '${format[i]}' for MIDI message type '${type}'`
+            );
+
+          parameter[format[i]] = midiMessageTypes[type][format[i]].default;
+        }
       }
-      let { param, i } = this.parseFunctions[type](args, index);
-      index = i;
-      params.push(param);
+      parameter.name = type + ' ' + midiMessageTypes[type].name.map(p => parameter[p]).join(' ');
+      parameters.push(parameter);
     }
-    return params;
+    return parameters;
   }
 
   // Expand presets from the device module to the parameter
